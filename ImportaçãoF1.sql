@@ -985,9 +985,16 @@ ALTER TABLE DWFormula1.DBO.DimPais ADD paisId int IDENTITY
 ALTER TABLE DWFormula1.DBO.DimCidade ADD cidadeId int IDENTITY
 ALTER TABLE DWFormula1.DBO.DimNacional ADD nacId int IDENTITY
 
-SELECT [circId],DWC.cidadeId,DWP.paisId,[lat],[lng] FROM [BancoF2].[dbo].[Circuito] C2 
-	INNER JOIN DWFormula1.DBO.DimPais DWP ON C2.pais = DWP.pais
-	INNER JOIN DWFormula1.dbo.DimCidade DWC ON C2.cidade = DWC.cidade
+
+SELECT CR1.corridaId, C2.circId, PC1.pilotClassId, PC1.pilotId, RES.equipId, RES.resultId, EQCL.equipClassId, EQRE.equipResId, Q1.qualifId   
+FROM [BancoF2].[dbo].[Circuito] C2 
+	INNER JOIN [BancoF2].[dbo].[Corrida] CR1 ON C2.[circId] = CR1.[circId]
+	INNER JOIN [BancoF2].[dbo].[PilotoClassif] PC1 ON PC1.corridaId = CR1.corridaId
+	INNER JOIN [BancoF2].[dbo].[Piloto] P1 ON PC1.pilotId = P1.pilotId
+	INNER JOIN [BancoF2].[dbo].[Resultado] RES ON P1.pilotId = RES.pilotId
+	INNER JOIN [BancoF2].[dbo].[EquipeClassif] EQCL ON RES.equipId = EQCL.equipId
+	INNER JOIN [BancoF2].[dbo].[EquipeResult] EQRE ON RES.equipId = EQRE.equipId
+	INNER JOIN [BancoF2].[dbo].[Qualificacao] Q1 ON RES.corridaId = Q1.corridaId 
 
 SELECT [equipId],DWP.paisId FROM [BancoF2].[dbo].[Equipe] E2 INNER JOIN DWFormula1.DBO.DimPais DWP ON E2.pais = DWP.pais
 
